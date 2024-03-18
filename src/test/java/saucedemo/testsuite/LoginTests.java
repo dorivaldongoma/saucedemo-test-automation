@@ -1,34 +1,42 @@
 package saucedemo.testsuite;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import saucedemo.pages.LoginPage;
+import saucedemo.pages.ProductsPage;
 
 @DisplayName("Testes automatizados da funcionalidade de Login")
 public class LoginTests {
+    private WebDriver navegador;
+
+    @BeforeEach
+    public void setup(){
+        // Inicializar o browser
+        WebDriverManager.chromedriver().setup();
+        navegador = new ChromeDriver();
+    }
+
     @DisplayName("Login de usuário com dados válidos")
     @Test()
     public void testLoginDeUsuarioComDadosValidos(){
-        // Inicializar o browser
-        WebDriverManager.chromedriver().setup();
-        WebDriver navegador = new ChromeDriver();
-
         // Navegar até ao site
-        navegador.get("https://saucedemo.com");
+        LoginPage loginPage = new LoginPage(navegador);
+        loginPage.goToLoginPage();
 
-        // Efectuar e confirmar o login
-        navegador.findElement(By.id("user-name")).sendKeys("standard_user");
-        navegador.findElement(By.id("password")).sendKeys("secret_sauce");
-        navegador.findElement(By.id("login-button")).click();
+        // Efectuar o login
+        loginPage.login("standard_user", "secret_sauce");
 
-        String textoValidacao = navegador.findElement(By.className("app_logo")).getText();
+        // Confirmar o login
+        ProductsPage productsPage = new ProductsPage(navegador);
 
-        Assertions.assertEquals("Swag Labs", textoValidacao);
+        String validationText = productsPage.getValidationText();
+        Assertions.assertEquals("Swag Labs", validationText);
+    }
 
+    @AfterEach
+    public void tearDown(){
         // Fechar o browser
         navegador.close();
     }
