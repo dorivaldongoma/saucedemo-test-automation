@@ -5,7 +5,6 @@ import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import saucedemo.pages.LoginPage;
-import saucedemo.pages.ProductsPage;
 
 @DisplayName("Testes automatizados da funcionalidade de Login")
 public class LoginTests {
@@ -21,17 +20,12 @@ public class LoginTests {
     @DisplayName("Login de usuário com dados válidos")
     @Test()
     public void testLoginDeUsuarioComDadosValidos(){
-        // Navegar até ao site
-        LoginPage loginPage = new LoginPage(navegador);
-        loginPage.goToLoginPage();
+        // Navegar até ao site, efectuar login e validar
+        String validationText = new LoginPage(navegador)
+                .goToLoginPage()
+                .login("standard_user", "secret_sauce")
+                .getValidationText();
 
-        // Efectuar o login
-        loginPage.login("standard_user", "secret_sauce");
-
-        // Confirmar o login
-        ProductsPage productsPage = new ProductsPage(navegador);
-
-        String validationText = productsPage.getValidationText();
         Assertions.assertEquals("Swag Labs", validationText);
     }
 

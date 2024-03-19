@@ -18,12 +18,16 @@ public class LoginPage extends BasePage {
         super(navegador);
     }
 
-    public void goToLoginPage(){
+    public LoginPage goToLoginPage(){
         navegador.get("https://saucedemo.com");
+
+        return new LoginPage(navegador);
     }
-    public void login(String username, String password){
+    public ProductsPage login(String username, String password){
         usernameInput.sendKeys(username);
         passwordInput.sendKeys(password);
         loginButton.click();
+
+        return new ProductsPage(navegador);
     }
 }
