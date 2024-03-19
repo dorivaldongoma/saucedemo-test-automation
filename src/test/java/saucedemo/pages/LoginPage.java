@@ -1,14 +1,18 @@
 package saucedemo.pages;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import saucedemo.core.BasePage;
 
 public class LoginPage extends BasePage {
 
-    public By usernameInputLocalizer = By.id("user-name");
-    public By passwordInputLocalizer = By.id("password");
-    public By loginButtonLocalizer = By.id("login-button");
+    @FindBy(id = "user-name")
+    private WebElement usernameInput;
+    @FindBy(id = "password")
+    private WebElement passwordInput;
+    @FindBy(id = "login-button")
+    private WebElement loginButton;
 
     public LoginPage(WebDriver navegador) {
         super(navegador);
@@ -18,8 +22,8 @@ public class LoginPage extends BasePage {
         navegador.get("https://saucedemo.com");
     }
     public void login(String username, String password){
-        navegador.findElement(usernameInputLocalizer).sendKeys(username);
-        navegador.findElement(passwordInputLocalizer).sendKeys(password);
-        navegador.findElement(loginButtonLocalizer).click();
+        usernameInput.sendKeys(username);
+        passwordInput.sendKeys(password);
+        loginButton.click();
     }
 }
